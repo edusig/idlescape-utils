@@ -1,0 +1,11 @@
+{
+  "name": "idlescape-marketplace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Eduardo S Ciciliato",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "socket.io": "^2.3.0"
+  }
+}
