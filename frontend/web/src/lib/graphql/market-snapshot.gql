@@ -1,0 +1,19 @@
+fragment marketSnapshotFields on MarketSnapshot {
+  id
+  name
+  minPrice
+  maxPrice
+  medianPrice
+  sumPrice
+  averagePrice
+  volume
+  relativeMinPrice
+  routineAt
+  lastUpdatedAt
+}
+
+query MarketSnapshot {
+  marketSnapshot {
+    ...marketSnapshotFields
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@app/components/*": ["web/src/components/*"],
+      "@app/util/*": ["web/src/lib/util/*"],
+      "@app/data/*": ["web/src/lib/data/*"],
+      "@app/hooks/*": ["web/src/lib/hooks/*"],
+      "@app/constants/*": ["web/src/lib/constants/*"],
+      "@app/lib/*": ["web/src/lib/*"],
+      "@app/styled-components/*": ["web/src/styled-components/*"],
+      "@app/public/*": ["public/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../core/lib/indicative.ts"],
+  "exclude": ["node_modules"]
+}
