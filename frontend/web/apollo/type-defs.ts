@@ -1,12 +1,6 @@
 import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
-  type User {
-    id: ID!
-    name: String!
-    status: String!
-  }
-
   type MarketSnapshot {
     id: String!
     name: String!
@@ -22,7 +16,6 @@ export const typeDefs = gql`
   }
 
   type Query {
-    viewer: User
     marketSnapshot: [MarketSnapshot]
   }
 `;

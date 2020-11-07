@@ -23,7 +23,6 @@ export const DefaultSEO: React.FC = () => {
     { name: 'msapplication-TileImage', content: '/favicons/ms-icon-144x144.png' },
     { name: 'application-name', content: siteName },
   ];
-  const sameAs: string[] = [];
   return (
     <>
       <DefaultSeo
