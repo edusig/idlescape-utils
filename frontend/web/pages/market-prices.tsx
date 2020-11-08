@@ -1,18 +1,15 @@
 import * as React from 'react';
-import { initializeApollo } from '../apollo/client';
 import { GetServerSideProps } from 'next';
-import {
-  MarketSnapshotDocument,
-  MarketSnapshotQuery,
-  useMarketSnapshotQuery,
-} from '@app/lib/graphql/hooks';
 import IndexLayout from '@app/components/layout';
 import { AdminTitle } from '@app/components/admin-title';
 import Typography from '@app/components/typography';
 import styled from 'styled-components';
+import useSWR from 'swr';
 import { formatNumber } from '@app/util/formatters/number';
 import Image from 'next/image';
 import { imageDict } from '@app/lib/game/image-dict';
+import fetch from 'isomorphic-unfetch';
+import { MarketPricesGetResponse } from './api/market-prices';
 
 const Row = styled.tr`
   &:nth-child(2n) {
@@ -34,11 +31,15 @@ const ItemName = styled(Typography)`
   margin-left: 1rem;
 `;
 
-const MarketPricesPage: React.FC = () => {
-  const marketSnapshotQ = useMarketSnapshotQuery();
+interface MarketPricesPageProps {
+  initialMarketSnapshot: MarketPricesGetResponse;
+}
+
+const MarketPricesPage: React.FC<MarketPricesPageProps> = ({ initialMarketSnapshot }) => {
+  const marketSnapshotQ = useSWR('/api/market-prices', { initialData: initialMarketSnapshot });
   const marketSnapshot = React.useMemo(
     () =>
-      (marketSnapshotQ.data?.marketSnapshot || []).map(it => (
+      (marketSnapshotQ.data?.marketPrices || []).map((it: any) => (
         <Row>
           <CustomCell>
             <Image src={imageDict[parseInt(it?.id || '3')]} width={24} height={24} />
@@ -74,7 +75,7 @@ const MarketPricesPage: React.FC = () => {
       )),
     [marketSnapshotQ.data]
   );
-  console.log(marketSnapshotQ.data?.marketSnapshot);
+  console.log(marketSnapshotQ.data);
   return (
     <IndexLayout title="Market Prices">
       <AdminTitle title="Market Prices" />
@@ -121,13 +122,10 @@ const MarketPricesPage: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const apolloClient = initializeApollo();
-  await apolloClient.query<MarketSnapshotQuery>({ query: MarketSnapshotDocument });
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  };
+  const initialMarketSnapshot = await fetch(
+    `${process.env.NEXT_PUBLIC_API_HOST}/api/market-prices`
+  ).then(res => res.json());
+  return { props: { initialMarketSnapshot } };
 };
 
 export default MarketPricesPage;

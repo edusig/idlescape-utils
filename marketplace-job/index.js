@@ -39,7 +39,9 @@ socket.on('get market manifest', data => {
 
 socket.on('get player marketplace items', data => {
   const body = processItemData(data);
-  processedQueue.push(body);
+  if(body != null) {
+    processedQueue.push(body);
+  }
 });
 
 // Utilitary functions
@@ -69,7 +71,12 @@ const getPercent = (data, percent) => {
 }
 
 const processItemData = data => {
-  const median = data[Math.floor((data.length - 1) / 2)].price;
+  if(data.length <= 0) {
+    return null;
+  }
+  const middle = Math.floor((data.length - 1) / 2);
+  const medianData = data[!isNaN(middle) && middle >= 0 ? middle : 0];
+  const median = medianData != null && medianData.hasOwnProperty('price') ? medianData.price : data[0].price
   // Removes outliers (Price > 1 Billion or 100x greater than the median)
   const filtered = data.filter(it => it.price <= 1000000000 && it.price <= median * 100, )
   const sum = filtered.reduce((acc, it) => acc + it.price, 0);
