@@ -10,17 +10,17 @@ const AdminMain = styled.main`
   padding-top: 4rem;
   padding-bottom: 2rem;
   ${props => props.theme.breakpoints.up('md')} {
-    margin-left: 240px;
+    margin-left: 200px;
   }
 `;
 
 const AdminContainer = styled.div`
   box-sizing: content-box;
-  max-width: 690px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 1rem;
   ${props => props.theme.breakpoints.up('md')} {
-    max-width: 1200px;
+    max-width: 1160px;
   }
 `;
 

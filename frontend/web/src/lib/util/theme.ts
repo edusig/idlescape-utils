@@ -37,18 +37,18 @@ export const theme: DefaultTheme = {
       lineHeight: 1.167,
     },
     h4: {
-      fontSize: '2rem',
+      fontSize: '1.75rem',
       fontWeight: 300,
       lineHeight: 1.235,
     },
     h5: {
-      fontSize: '1.75rem',
+      fontSize: '1.5rem',
       fontWeight: 300,
       lineHeight: 1.334,
     },
     h6: {
-      fontSize: '1.5rem',
-      fontWeight: 300,
+      fontSize: '1.25rem',
+      fontWeight: 500,
       lineHeight: 1.6,
     },
     body1: {

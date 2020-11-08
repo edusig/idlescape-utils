@@ -6,22 +6,9 @@ export interface MarketPricesGetResponse {
     id: string;
     name: string;
     minPrice: number;
-    maxPrice: number;
-    medianPrice: number;
-    sumPrice: number;
-    meanPrice: number;
     volume: number;
     offerCount: number;
-    relativeMinPriceFirst5: number;
-    relativeMinPriceFirst10: number;
-    relativeMinPriceFirst5Pct: number;
-    relativeMinPriceFirst10Pct: number;
-    relativeMinPriceFirst15Pct: number;
-    stdDeviation: number;
-    routineAt: string;
     routineAtTime: number;
-    updatedAt: string;
-    updatedAtTime: number;
   }[];
 }
 
@@ -39,8 +26,11 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
       }
       return {
         id: it.id,
-        routineAtTime: it.routineAtTime,
-        ...data,
+        name: data.name,
+        minPrice: data.minPrice,
+        volume: data.volume,
+        offerCount: data.offerCount,
+        routineAtTime: parseInt(it.routineAtTime, 10),
       };
     });
     res.json({ marketPrices: data });

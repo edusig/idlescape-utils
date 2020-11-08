@@ -1,41 +1,21 @@
-import * as React from 'react';
 import { GetServerSideProps } from 'next';
 import IndexLayout from '@app/components/layout';
 import { AdminTitle } from '@app/components/admin-title';
 import Typography from '@app/components/typography';
-import styled from 'styled-components';
 import useSWR from 'swr';
 import { formatNumber } from '@app/util/formatters/number';
 import Image from 'next/image';
 import { imageDict } from '@app/lib/game/image-dict';
 import fetch from 'isomorphic-unfetch';
 import { MarketPricesGetResponse } from './api/market-prices';
+import formatDate from 'date-fns/format';
+import { useMemo } from 'react';
+import { FaChartLine } from 'react-icons/fa';
+import Link from 'next/link';
+import { Cell, CustomCell, ResponsiveTable, Row, Table } from '@app/styled-components/table';
+import styled from 'styled-components';
 
-const Row = styled.tr`
-  &:nth-child(2n) {
-    background-color: #007fd726;
-  }
-`;
-
-const ResponsiveTable = styled.div`
-  overflow-x: auto;
-`;
-
-const Table = styled.table`
-  width: 960px;
-`;
-
-const Cell = styled.td`
-  padding: 0.5rem 0.5rem;
-  border-bottom: thin solid #007fd736;
-`;
-
-const CustomCell = styled(Cell)`
-  display: flex;
-  align-items: center;
-`;
-
-const ItemName = styled(Typography)`
+export const ItemName = styled(Typography)`
   margin-left: 1rem;
 `;
 
@@ -43,50 +23,59 @@ interface MarketPricesPageProps {
   initialMarketSnapshot: MarketPricesGetResponse;
 }
 
-const MarketPricesPage: React.FC<MarketPricesPageProps> = ({ initialMarketSnapshot }) => {
+const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
   const marketSnapshotQ = useSWR('/api/market-prices', { initialData: initialMarketSnapshot });
-  const marketSnapshot = React.useMemo(
+  const marketSnapshot = useMemo(
     () =>
-      (marketSnapshotQ.data?.marketPrices || []).map((it: any) => (
-        <Row>
+      (marketSnapshotQ.data?.marketPrices || []).map((it: any, idx: number) => (
+        <Row key={idx}>
           <CustomCell>
-            <Image src={imageDict[parseInt(it?.id || '3')]} width={24} height={24} />
-            <ItemName variant="body2">{it?.name}</ItemName>
+            <Image
+              src={imageDict[parseInt(it?.id || '3')]}
+              width={32}
+              height={32}
+              loading={idx <= 15 ? 'eager' : 'lazy'}
+              priority={idx <= 10}
+            />
+            <ItemName variant="body1">{it?.name}</ItemName>
           </CustomCell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography variant="body1" align="right">
               {formatNumber(it?.minPrice || 0, 2, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
-              {formatNumber(it?.medianPrice || 0, 2, 0)}
-            </Typography>
-          </Cell>
-          <Cell>
-            <Typography variant="body2" align="right">
-              {formatNumber(it?.meanPrice || 0, 2, 0)}
-            </Typography>
-          </Cell>
-          <Cell>
-            <Typography variant="body2" align="right">
+            <Typography variant="body1" align="right">
               {formatNumber(it?.volume || 0, 2, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography variant="body1" align="right">
               {formatNumber(it?.offerCount || 0, 2, 0)}
             </Typography>
           </Cell>
-          <Cell></Cell>
+          <Cell>
+            <Link href={`/market-prices/${it?.id}`}>
+              <FaChartLine size={24} />
+            </Link>
+          </Cell>
         </Row>
       )),
     [marketSnapshotQ.data]
   );
-  console.log(marketSnapshotQ.data);
+  const lastUpdate = useMemo(
+    () =>
+      (marketSnapshotQ.data?.marketPrices.length || 0) > 0
+        ? `Last update at: ${formatDate(
+            new Date(marketSnapshotQ.data?.marketPrices[0]!.routineAtTime!),
+            'HH:mm:ss - MM/dd/yyyy'
+          )}`
+        : undefined,
+    [marketSnapshotQ.data]
+  );
   return (
     <IndexLayout title="Market Prices">
-      <AdminTitle title="Market Prices" />
+      <AdminTitle title="Market Prices" subtitle={lastUpdate} />
       <ResponsiveTable>
         <Table cellSpacing={0}>
           <thead>
@@ -97,16 +86,6 @@ const MarketPricesPage: React.FC<MarketPricesPageProps> = ({ initialMarketSnapsh
               <Cell>
                 <Typography variant="subtitle1" align="right">
                   Min Price
-                </Typography>
-              </Cell>
-              <Cell>
-                <Typography variant="subtitle1" align="right">
-                  Median Price
-                </Typography>
-              </Cell>
-              <Cell>
-                <Typography variant="subtitle1" align="right">
-                  Mean Price
                 </Typography>
               </Cell>
               <Cell>
