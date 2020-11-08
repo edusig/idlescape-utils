@@ -17,6 +17,14 @@ const Row = styled.tr`
   }
 `;
 
+const ResponsiveTable = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 960px;
+`;
+
 const Cell = styled.td`
   padding: 0.5rem 0.5rem;
   border-bottom: thin solid #007fd736;
@@ -79,44 +87,46 @@ const MarketPricesPage: React.FC<MarketPricesPageProps> = ({ initialMarketSnapsh
   return (
     <IndexLayout title="Market Prices">
       <AdminTitle title="Market Prices" />
-      <table cellSpacing={0}>
-        <thead>
-          <tr>
-            <Cell>
-              <Typography variant="subtitle1">Item</Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1" align="right">
-                Min Price
-              </Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1" align="right">
-                Median Price
-              </Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1" align="right">
-                Mean Price
-              </Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1" align="right">
-                Volume
-              </Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1" align="right">
-                Offer Count
-              </Typography>
-            </Cell>
-            <Cell>
-              <Typography variant="subtitle1">Actions</Typography>
-            </Cell>
-          </tr>
-        </thead>
-        <tbody>{marketSnapshot}</tbody>
-      </table>
+      <ResponsiveTable>
+        <Table cellSpacing={0}>
+          <thead>
+            <tr>
+              <Cell>
+                <Typography variant="subtitle1">Item</Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1" align="right">
+                  Min Price
+                </Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1" align="right">
+                  Median Price
+                </Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1" align="right">
+                  Mean Price
+                </Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1" align="right">
+                  Volume
+                </Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1" align="right">
+                  Offer Count
+                </Typography>
+              </Cell>
+              <Cell>
+                <Typography variant="subtitle1">Actions</Typography>
+              </Cell>
+            </tr>
+          </thead>
+          <tbody>{marketSnapshot}</tbody>
+        </Table>
+      </ResponsiveTable>
     </IndexLayout>
   );
 };

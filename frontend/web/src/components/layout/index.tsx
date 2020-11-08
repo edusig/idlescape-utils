@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { SEO } from '@app/components/seo';
-import { AdminDrawer } from './index-drawer';
-import { AdminToolbar } from './index-toolbar';
-import { AdminSidebar } from './index-sidebar';
+import { IndexDrawer } from './index-drawer';
+import { IndexToolbar } from './index-toolbar';
+import { IndexSidebar } from './index-sidebar';
+import Head from 'next/head';
 
 const AdminMain = styled.main`
   padding-top: 4rem;
@@ -25,6 +26,7 @@ const AdminContainer = styled.div`
 
 const AdminContent = styled.div`
   max-width: 960px;
+  overflow: hidden;
 `;
 
 interface OwnProps {
@@ -39,17 +41,21 @@ export const IndexLayout: React.FunctionComponent<OwnProps> = props => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <div>
+      <Head>
+        {' '}
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <SEO title={title} />
       <header>
-        <AdminToolbar OnOpenDrawer={menuHandler} />
+        <IndexToolbar OnOpenDrawer={menuHandler} />
       </header>
-      <AdminDrawer
+      <IndexDrawer
         open={menuOpen}
         onClose={() => {
           setMenuOpen(false);
         }}
       />
-      <AdminSidebar />
+      <IndexSidebar />
       <AdminMain>
         <AdminContainer>
           <AdminContent>{props.children}</AdminContent>

@@ -76,7 +76,7 @@ interface AdminDrawerProps {
   onClose: () => any;
 }
 
-export const AdminDrawer: React.FC<AdminDrawerProps> = ({ open, onClose }) => {
+export const IndexDrawer: React.FC<AdminDrawerProps> = ({ open, onClose }) => {
   return (
     <div>
       <Drawer $open={open}>

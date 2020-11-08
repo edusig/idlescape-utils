@@ -40,7 +40,7 @@ interface AdminToolbarProps {
   OnOpenDrawer: () => any;
 }
 
-export const AdminToolbar: React.FC<AdminToolbarProps> = ({ OnOpenDrawer }) => {
+export const IndexToolbar: React.FC<AdminToolbarProps> = ({ OnOpenDrawer }) => {
   return (
     <AppBar>
       <MenuButton onClick={OnOpenDrawer} color="inherit">

@@ -40,7 +40,7 @@ const MenuItemIcon = styled.div`
   margin: 0 1rem;
 `;
 
-export const AdminSidebar: React.FC = () => {
+export const IndexSidebar: React.FC = () => {
   const { asPath } = useRouter();
   return (
     <FixedMenu>
