@@ -11,37 +11,37 @@ export type Scalars = {
   Float: number;
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  status: Scalars['String'];
-};
-
 export type MarketSnapshot = {
   __typename?: 'MarketSnapshot';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
   minPrice: Scalars['Float'];
   maxPrice: Scalars['Float'];
   medianPrice: Scalars['Float'];
   sumPrice: Scalars['Float'];
-  averagePrice: Scalars['Float'];
+  meanPrice: Scalars['Float'];
   volume: Scalars['Int'];
-  relativeMinPrice: Scalars['Float'];
+  offerCount: Scalars['Int'];
+  relativeMinPriceFirst5: Scalars['Float'];
+  relativeMinPriceFirst10: Scalars['Float'];
+  relativeMinPriceFirst5Pct: Scalars['Float'];
+  relativeMinPriceFirst10Pct: Scalars['Float'];
+  relativeMinPriceFirst15Pct: Scalars['Float'];
+  stdDeviation: Scalars['Float'];
   routineAt: Scalars['String'];
-  lastUpdatedAt: Scalars['String'];
+  routineAtTime: Scalars['Float'];
+  updatedAt: Scalars['String'];
+  updatedAtTime: Scalars['Float'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  viewer?: Maybe<User>;
   marketSnapshot?: Maybe<Array<Maybe<MarketSnapshot>>>;
 };
 
 export type MarketSnapshotFieldsFragment = (
   { __typename?: 'MarketSnapshot' }
-  & Pick<MarketSnapshot, 'id' | 'name' | 'minPrice' | 'maxPrice' | 'medianPrice' | 'sumPrice' | 'averagePrice' | 'volume' | 'relativeMinPrice' | 'routineAt' | 'lastUpdatedAt'>
+  & Pick<MarketSnapshot, 'id' | 'name' | 'minPrice' | 'maxPrice' | 'medianPrice' | 'sumPrice' | 'meanPrice' | 'volume' | 'offerCount' | 'relativeMinPriceFirst5' | 'relativeMinPriceFirst10' | 'relativeMinPriceFirst5Pct' | 'relativeMinPriceFirst10Pct' | 'relativeMinPriceFirst15Pct' | 'stdDeviation' | 'routineAt' | 'routineAtTime' | 'updatedAt' | 'updatedAtTime'>
 );
 
 export type MarketSnapshotQueryVariables = Exact<{ [key: string]: never; }>;
@@ -63,11 +63,19 @@ export const MarketSnapshotFieldsFragmentDoc = gql`
   maxPrice
   medianPrice
   sumPrice
-  averagePrice
+  meanPrice
   volume
-  relativeMinPrice
+  offerCount
+  relativeMinPriceFirst5
+  relativeMinPriceFirst10
+  relativeMinPriceFirst5Pct
+  relativeMinPriceFirst10Pct
+  relativeMinPriceFirst15Pct
+  stdDeviation
   routineAt
-  lastUpdatedAt
+  routineAtTime
+  updatedAt
+  updatedAtTime
 }
     `;
 export const MarketSnapshotDocument = gql`
@@ -86,4 +94,4 @@ export function useMarketSnapshotLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type MarketSnapshotQueryHookResult = ReturnType<typeof useMarketSnapshotQuery>;
 export type MarketSnapshotLazyQueryHookResult = ReturnType<typeof useMarketSnapshotLazyQuery>;
 export type MarketSnapshotQueryResult = Apollo.QueryResult<MarketSnapshotQuery, MarketSnapshotQueryVariables>;
-// Generated on 2020-11-06T20:08:25-03:00
+// Generated on 2020-11-07T16:23:02-03:00

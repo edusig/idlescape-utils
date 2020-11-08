@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { AppProps } from 'next/app';
 import { theme } from '@app/util/theme';
-import { ThemeProvider, StylesProvider } from '@material-ui/styles';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { CssBaseline } from '@material-ui/core';
 import { NProgressStyleCreator, usePageLoader } from '@0soft/use-nextjs-page-loader';
 import { DefaultSEO } from '@app/components/default-seo';
 import { GlobalSnackbar } from '@app/components/feedback/global-snackbar';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../apollo/client';
+import { CSSBaseline } from '@app/styled-components/css-baseline';
 
 const NProgressStyle = NProgressStyleCreator('rgba(0, 91, 168, 1)');
 
@@ -29,17 +28,13 @@ const CustomApp: React.FC<AppProps> = ({ Component, pageProps, router }) => {
   });
   return (
     <ApolloProvider client={apolloClient}>
-      <ThemeProvider theme={theme}>
-        <StylesProvider injectFirst>
-          <DefaultSEO />
-          <CssBaseline />
-          <StyledThemeProvider theme={theme}>
-            <Component {...pageProps} key={router.route} />
-            <GlobalSnackbar />
-            <NProgressStyle />
-          </StyledThemeProvider>
-        </StylesProvider>
-      </ThemeProvider>
+      <CSSBaseline />
+      <DefaultSEO />
+      <StyledThemeProvider theme={theme}>
+        <Component {...pageProps} key={router.route} />
+        <GlobalSnackbar />
+        <NProgressStyle />
+      </StyledThemeProvider>
     </ApolloProvider>
   );
 };

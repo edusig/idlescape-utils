@@ -2,17 +2,25 @@ import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
   type MarketSnapshot {
-    id: String!
+    id: ID!
     name: String!
     minPrice: Float!
     maxPrice: Float!
     medianPrice: Float!
     sumPrice: Float!
-    averagePrice: Float!
+    meanPrice: Float!
     volume: Int!
-    relativeMinPrice: Float!
+    offerCount: Int!
+    relativeMinPriceFirst5: Float!
+    relativeMinPriceFirst10: Float!
+    relativeMinPriceFirst5Pct: Float
+    relativeMinPriceFirst10Pct: Float
+    relativeMinPriceFirst15Pct: Float
+    stdDeviation: Float!
     routineAt: String!
-    lastUpdatedAt: String!
+    routineAtTime: Float!
+    updatedAt: String!
+    updatedAtTime: Float!
   }
 
   type Query {

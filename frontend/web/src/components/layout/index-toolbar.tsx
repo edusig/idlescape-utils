@@ -1,24 +1,39 @@
 import * as React from 'react';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-import MenuIcon from '@material-ui/icons/Menu';
+import { FaBars } from 'react-icons/fa';
 
-const CustomAppBar = styled(AppBar)`
+const AppBar = styled.div`
   background: linear-gradient(135deg, rgba(0, 91, 168, 1) 0%, rgba(0, 151, 246, 1) 100%);
-`;
-
-const MenuButton = styled(IconButton)`
-  margin-right: ${props => props.theme.spacing(2)}px;
-`;
-
-const TopNavToolbar = styled(Toolbar)`
-  justify-content: space-between;
-`;
-
-const TopNavSection = styled.div`
-  justify-content: center;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%),
+    0px 1px 10px 0px rgb(0 0 0 / 12%);
+  padding: 0 1rem;
+  height: 4rem;
+  color: white;
   display: flex;
+  align-items: center;
+  z-index: ${props => props.theme.zIndex.appbar};
+`;
+
+const MenuButton = styled.button`
+  padding: 0.5rem;
+  margin-right: 1rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  display: none;
+  ${props => props.theme.breakpoints.down('md')} {
+    display: block;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin: 0;
 `;
 
 interface AdminToolbarProps {
@@ -27,17 +42,11 @@ interface AdminToolbarProps {
 
 export const AdminToolbar: React.FC<AdminToolbarProps> = ({ OnOpenDrawer }) => {
   return (
-    <CustomAppBar position="fixed" color="primary">
-      <TopNavToolbar>
-        <TopNavSection>
-          <MenuButton onClick={OnOpenDrawer} color="inherit">
-            <MenuIcon />
-          </MenuButton>
-          <Typography variant="h5" component="h1">
-            Idlescape Utils
-          </Typography>
-        </TopNavSection>
-      </TopNavToolbar>
-    </CustomAppBar>
+    <AppBar>
+      <MenuButton onClick={OnOpenDrawer} color="inherit">
+        <FaBars />
+      </MenuButton>
+      <Title>Idlescape Utils</Title>
+    </AppBar>
   );
 };

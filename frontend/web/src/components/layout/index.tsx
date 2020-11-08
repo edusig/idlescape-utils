@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { SEO } from '@app/components/seo';
 import { AdminDrawer } from './index-drawer';
 import { AdminToolbar } from './index-toolbar';
+import { AdminSidebar } from './index-sidebar';
 
 const AdminMain = styled.main`
-  padding-top: ${props => props.theme.spacing(8)}px;
-  padding-bottom: ${props => props.theme.spacing(4)}px;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
   ${props => props.theme.breakpoints.up('md')} {
     margin-left: 240px;
   }
@@ -16,7 +17,7 @@ const AdminContainer = styled.div`
   box-sizing: content-box;
   max-width: 690px;
   margin: 0 auto;
-  padding: ${props => props.theme.spacing(0, 2)};
+  padding: 0 1rem;
   ${props => props.theme.breakpoints.up('md')} {
     max-width: 1200px;
   }
@@ -48,6 +49,7 @@ export const IndexLayout: React.FunctionComponent<OwnProps> = props => {
           setMenuOpen(false);
         }}
       />
+      <AdminSidebar />
       <AdminMain>
         <AdminContainer>
           <AdminContent>{props.children}</AdminContent>

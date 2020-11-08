@@ -5,11 +5,19 @@ fragment marketSnapshotFields on MarketSnapshot {
   maxPrice
   medianPrice
   sumPrice
-  averagePrice
+  meanPrice
   volume
-  relativeMinPrice
+  offerCount
+  relativeMinPriceFirst5
+  relativeMinPriceFirst10
+  relativeMinPriceFirst5Pct
+  relativeMinPriceFirst10Pct
+  relativeMinPriceFirst15Pct
+  stdDeviation
   routineAt
-  lastUpdatedAt
+  routineAtTime
+  updatedAt
+  updatedAtTime
 }
 
 query MarketSnapshot {
