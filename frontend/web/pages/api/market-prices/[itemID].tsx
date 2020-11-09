@@ -24,7 +24,7 @@ export interface ItemDetail {
 }
 
 export interface ItemDetailGetResponse {
-  current: ItemDetail;
+  current?: ItemDetail;
   history: ItemDetail[];
 }
 
@@ -35,6 +35,9 @@ const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       `***REMOVED***/tabs/market-history/id/${req.query.itemID}`
     );
     const apiData = await api.json();
+    if (!Array.isArray(apiData)) {
+      return res.json({ current: null, history: [] });
+    }
     const history = apiData.reverse().map((it: any) => {
       let data: any = {};
       try {

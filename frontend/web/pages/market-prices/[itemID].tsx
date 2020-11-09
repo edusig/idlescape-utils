@@ -94,7 +94,7 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
   );
   const lastUpdate = useMemo(
     () =>
-      itemDetailQ.data?.current.routineAtTime != null
+      itemDetailQ.data?.current?.routineAtTime != null
         ? `Last update at: ${formatDate(
             new Date(itemDetailQ.data.current.routineAtTime!),
             'HH:mm - MM/dd/yy'
@@ -191,7 +191,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const initialItemDetail: ItemDetailGetResponse = await fetch(
     `${process.env.NEXT_PUBLIC_API_HOST}/api/market-prices/${itemID}`
   ).then(res => res.json());
-  return { props: { initialItemDetail, itemName: initialItemDetail.current.name } };
+  return { props: { initialItemDetail, itemName: initialItemDetail?.current?.name ?? '' } };
 };
 
 export default MarketPricesDetail;

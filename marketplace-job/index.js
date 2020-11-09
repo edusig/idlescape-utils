@@ -16,9 +16,9 @@ const socket = io('wss://idlescape.com', { query: { token: `Bearer ${jwt}` } });
 // Constants
 // Every minute check if its a 30min interval (0 or 30)
 MARKET_ROUTINE_TIMEOUT = 60000;
-// Every 3secs (+/- 1sec)
-ITEM_ROUTINE_TIMEOUT = 3000;
-ITEM_RAND_TIMEOUT = 1000;
+// Every 2secs (+/- 500ms)
+ITEM_ROUTINE_TIMEOUT = 1500;
+ITEM_RAND_TIMEOUT = 500;
 
 // Shared values
 let itemQueue = [];
@@ -124,7 +124,7 @@ const itemCheck = id => socket.emit('get player marketplace items', id);
 // Main routines
 const marketRoutine = () => {
   const now = new Date();
-  if([15, 45].includes(now.getMinutes())) {
+  if([0, 30].includes(now.getMinutes())) {
     console.log('ITS TIME TO UPDATE', now.toISOString());
     itemQueue = [];
     processedQueue = [];

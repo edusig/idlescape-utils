@@ -17,6 +17,9 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
     console.log('Called market snapshot');
     let api = await fetch('***REMOVED***');
     const apiData = await api.json();
+    if (!Array.isArray(apiData)) {
+      return res.json({ marketPrices: [] });
+    }
     const data = apiData.map((it: any) => {
       let data: any = {};
       try {
