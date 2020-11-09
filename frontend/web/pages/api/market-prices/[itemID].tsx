@@ -49,7 +49,7 @@ const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         routineAtTime: parseInt(it.routineAtTime, 10),
       };
     });
-    const current = history[history.length - 1];
+    const current = history[0];
     res.json({ current, history });
   } else {
     res.status(405);

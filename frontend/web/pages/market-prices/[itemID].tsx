@@ -23,6 +23,13 @@ const DateCell = styled(Cell)`
   min-width: 130px;
 `;
 
+const Chart = styled.div`
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.87);
+`;
+
+// TODO: Pills with insights (lowest min price / highest min price / avg min price)
+// TODO:
 export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPricesDetailProps) => {
   const { query } = useRouter();
   const itemID = query.itemID as string;
@@ -110,10 +117,14 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
           />
         }
       />
+      {itemDetailQ.data != null && (
+        <Chart>
+          <PriceHistoryChart items={itemDetailQ.data.history.slice(0).reverse()} />
+        </Chart>
+      )}
       <Typography variant="caption" align="center">
         MMP = Mean Min Price of the first X offers
       </Typography>
-      {itemDetailQ.data != null && <PriceHistoryChart items={itemDetailQ.data.history} />}
       <ResponsiveTable>
         <Table cellSpacing={0}>
           <thead>

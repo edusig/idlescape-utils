@@ -1,7 +1,9 @@
 import {
+  Area,
   Bar,
   CartesianGrid,
   ComposedChart,
+  Legend,
   Line,
   ResponsiveContainer,
   Tooltip,
@@ -10,7 +12,8 @@ import {
 } from 'recharts';
 import { ItemDetail } from '../../../pages/api/market-prices/[itemID]';
 import formatDate from 'date-fns/format';
-import { formatNumber } from '@app/util/formatters/number';
+import { formatBigNumber, formatNumber } from '@app/util/formatters/number';
+import { useState } from 'react';
 
 export interface PriceHistoryChartProps {
   items: ItemDetail[];
@@ -18,8 +21,8 @@ export interface PriceHistoryChartProps {
 
 const nameDict: any = {
   minPrice: 'Min Price',
-  relativeMinPrice5: 'Mean Min Price First 5',
-  relativeMinPrice10: 'Mean Min Price First 10',
+  relativeMinPriceFirst5: 'MMP 5',
+  relativeMinPriceFirst10: 'MMP 10',
   meanPrice: 'Mean Price',
   medianPrice: 'Median Price',
   volume: 'Volume',
@@ -27,28 +30,75 @@ const nameDict: any = {
 };
 
 export const PriceHistoryChart = ({ items }: PriceHistoryChartProps) => {
-  console.log(items);
+  const [hide, setHide] = useState<any>({
+    minPrice: false,
+    relativeMinPriceFirst5: true,
+    relativeMinPriceFirst10: true,
+    meanPrice: false,
+    medianPrice: false,
+    volume: false,
+    offerCount: false,
+  });
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={500}>
       <ComposedChart data={items}>
-        <Line type="basis" dataKey="minPrice" stroke="#003f5c" />
-        <Line type="basis" dataKey="relativeMinPrice5" stroke="#374c80" />
-        <Line type="basis" dataKey="relativeMinPrice10" stroke="#7a5195" />
-        <Line type="basis" dataKey="meanPrice" stroke="#bc5090" />
-        <Line type="basis" dataKey="medianPrice" stroke="#ef5675" />
-        <Line type="basis" dataKey="offerCount" stroke="#ffa600" />
-        <Bar dataKey="volume" fill="#ff764a" yAxisId={1} />
+        <Area
+          type="monotone"
+          dataKey="offerCount"
+          stroke="#ffa600"
+          yAxisId={2}
+          hide={hide.offerCount}
+        />
+        <Bar dataKey="volume" hide={hide.volume} fill="#ff764a" yAxisId={1} height={200} />
+        <Line type="monotone" dataKey="minPrice" hide={hide.minPrice} stroke="#003f5c" />
+        <Line
+          type="monotone"
+          dataKey="relativeMinPriceFirst5"
+          hide={hide.relativeMinPriceFirst5}
+          stroke="#374c80"
+        />
+        <Line
+          type="monotone"
+          dataKey="relativeMinPriceFirst10"
+          hide={hide.relativeMinPriceFirst10}
+          stroke="#7a5195"
+        />
+        <Line type="monotone" dataKey="meanPrice" hide={hide.meanPrice} stroke="#bc5090" />
+        <Line type="monotone" dataKey="medianPrice" hide={hide.medianPrice} stroke="#ef5675" />
         <CartesianGrid stroke="#DDD" />
-        <YAxis dataKey="minPrice" />
         <XAxis
           dataKey="routineAtTime"
           scale="time"
           tickFormatter={time => formatDate(new Date(time), 'HH:mm - MM/dd')}
+          padding={{ left: 0, right: 10 }}
         />
-        <YAxis dataKey="volume" orientation="right" yAxisId={1} />
+        <YAxis tickFormatter={val => formatBigNumber(val, 2, 0)} width={50} />
+        <YAxis
+          dataKey="volume"
+          tickFormatter={val => formatBigNumber(val, 2, 0)}
+          orientation="right"
+          yAxisId={1}
+          padding={{ top: 300, bottom: 0 }}
+          width={50}
+        />
+        <YAxis
+          dataKey="offerCount"
+          orientation="right"
+          yAxisId={2}
+          hide
+          padding={{ top: 300, bottom: 0 }}
+        />
         <Tooltip
           labelFormatter={time => formatDate(new Date(time), 'HH:mm - MM/dd')}
           formatter={(val, name) => [formatNumber(val as number, 0, 0), nameDict[name]]}
+        />
+        <Legend
+          verticalAlign="top"
+          height={30}
+          onClick={dataSet =>
+            setHide((prev: any) => ({ ...prev, [dataSet.dataKey]: !prev[dataSet.dataKey] }))
+          }
+          formatter={val => nameDict[val]}
         />
       </ComposedChart>
     </ResponsiveContainer>
