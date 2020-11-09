@@ -15,6 +15,7 @@
     "@nivo/core": "^0.64.0",
     "@nivo/line": "^0.64.0",
     "@nivo/tooltip": "^0.64.0",
+    "@types/recharts": "^1.8.16",
     "date-fns": "^2.16.1",
     "event-emitter": "^0.3.5",
     "graphql": "^15.4.0",
@@ -32,6 +33,7 @@
     "react-dom": "npm:@preact/compat",
     "react-icons": "^3.11.0",
     "react-is": "^17.0.1",
+    "recharts": "^1.8.5",
     "styled-components": "^5.2.1",
     "swr": "^0.3.8"
   },

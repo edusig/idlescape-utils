@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { formatNumber } from '@app/util/formatters/number';
 import { imageDict } from '@app/lib/game/image-dict';
 import styled from 'styled-components';
+import { PriceHistoryChart } from '@app/components/chart/price-history-chart';
 
 interface MarketPricesDetailProps {
   initialItemDetail: ItemDetailGetResponse;
@@ -112,6 +113,7 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
       <Typography variant="caption" align="center">
         MMP = Mean Min Price of the first X offers
       </Typography>
+      {itemDetailQ.data != null && <PriceHistoryChart items={itemDetailQ.data.history} />}
       <ResponsiveTable>
         <Table cellSpacing={0}>
           <thead>
