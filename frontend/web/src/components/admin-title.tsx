@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Typography from './typography';
-import Image from 'next/image';
 
 const AdminTitleContainer = styled.div`
   margin-top: 2rem;
