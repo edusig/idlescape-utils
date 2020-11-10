@@ -7,6 +7,7 @@ const axios = require('axios');
 const sbApi = '***REMOVED***';
 const sbApiKey = '***REMOVED***';
 const reqOps = { headers: { 'Content-Type': 'application/json', 'X-Api-Key': sbApiKey } };
+const deleteOps = { headers: { 'X-Api-Key': sbApiKey } };
 
 // Socket.io initialization
 const jwt =
@@ -16,8 +17,8 @@ const socket = io('wss://idlescape.com', { query: { token: `Bearer ${jwt}` } });
 // Constants
 // Every minute check if its a 30min interval (0 or 30)
 MARKET_ROUTINE_TIMEOUT = 60000;
-// Every 2secs (+/- 500ms)
-ITEM_ROUTINE_TIMEOUT = 1500;
+// Every 1secs (+/- 500ms)
+ITEM_ROUTINE_TIMEOUT = 1000;
 ITEM_RAND_TIMEOUT = 500;
 
 // Shared values
@@ -109,7 +110,7 @@ const processItemData = data => {
 const updatesSheetItems = async queue => {
   try {
     console.log('ABOUT TO WRITE TO THE SPREADSHEET', new Date());
-    await axios.delete(`${sbApi}/0:400`);
+    await axios.delete(`${sbApi}/0:400`, deleteOps);
     await axios.post(`${sbApi}`, queue, reqOps);
     await axios.post(`${sbApi}/tabs/market-history`, queue, reqOps);
     console.log('SPREADSHEET UPDATED', new Date());

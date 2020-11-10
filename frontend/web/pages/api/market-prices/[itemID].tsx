@@ -32,7 +32,10 @@ const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     console.log('Called market snapshot');
     let api = await fetch(
-      `***REMOVED***/tabs/market-history/id/${req.query.itemID}`
+      `***REMOVED***/tabs/market-history/id/${req.query.itemID}`,
+      {
+        headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
+      }
     );
     const apiData = await api.json();
     if (!Array.isArray(apiData)) {
