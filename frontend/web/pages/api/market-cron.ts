@@ -19,8 +19,12 @@ const marketCronHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (req.method === 'GET') {
     console.log('Called market cron');
+    let t = setInterval(() => {
+      res.write('.');
+    }, 5000);
     await cron();
-    res.json({ status: 'ok' });
+    clearInterval(t);
+    res.end();
   } else {
     res.status(405);
   }
@@ -39,8 +43,8 @@ const jwt = process.env.IDLESCAPE_JWT_TOKEN;
 // Max time of 10 min to resolve the routine
 const ROUTINE_TIMEOUT = 10 * 60 * 1000;
 // Every 1secs (+/- 500ms)
-const ITEM_ROUTINE_TIMEOUT = 400;
-const ITEM_RAND_TIMEOUT = 200;
+const ITEM_ROUTINE_TIMEOUT = 200;
+const ITEM_RAND_TIMEOUT = 100;
 
 // Utilitary functions
 const getItemIds = (newItems: any[]) => newItems.slice(0).map(it => it.itemID);
@@ -192,7 +196,7 @@ const cron = async () => {
     };
 
     console.log('STARTING CLIENT');
-    setTimeout(() => marketRoutine(), 3000);
+    setTimeout(() => marketRoutine(), 1000);
     setTimeout(() => {
       reject();
     }, ROUTINE_TIMEOUT);
