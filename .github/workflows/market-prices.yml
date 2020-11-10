@@ -16,4 +16,5 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Call update endpoint
-        run: curl https://idlescape-utils.vercel.app/api/market-cron -H 'Authorization: Bearer ${{ secrets.CRON_SECRET }}' -v --max-time 600
+        run: |
+          curl https://idlescape-utils.vercel.app/api/market-cron -H 'Authorization: Bearer ${{ secrets.CRON_SECRET }}' -v --max-time 600
