@@ -39,8 +39,8 @@ const jwt = process.env.IDLESCAPE_JWT_TOKEN;
 // Max time of 10 min to resolve the routine
 const ROUTINE_TIMEOUT = 10 * 60 * 1000;
 // Every 1secs (+/- 500ms)
-const ITEM_ROUTINE_TIMEOUT = 1000;
-const ITEM_RAND_TIMEOUT = 500;
+const ITEM_ROUTINE_TIMEOUT = 400;
+const ITEM_RAND_TIMEOUT = 200;
 
 // Utilitary functions
 const getItemIds = (newItems: any[]) => newItems.slice(0).map(it => it.itemID);
