@@ -12,6 +12,7 @@ import { formatBigNumber, formatNumber } from '@app/util/formatters/number';
 import { Cell, ResponsiveTable, Table, Row, CustomCell } from '@app/styled-components/table';
 import Link from 'next/link';
 import { FaChartLine } from 'react-icons/fa';
+import formatDate from 'date-fns/format';
 
 interface HeatCostBenefirCalculatorProps {
   initialMarketSnapshot: any;
@@ -40,7 +41,7 @@ const HeatItem: FC<HeatItemProps> = ({ item, heatItem, pph }) => {
       </CustomCell>
       <Cell>
         <Typography $variant="body1" $align="right">
-          {formatNumber(pph, 2, 0)}
+          {formatBigNumber(heatItem.heat || 0, 2, 0)}
         </Typography>
       </Cell>
       <Cell>
@@ -50,7 +51,7 @@ const HeatItem: FC<HeatItemProps> = ({ item, heatItem, pph }) => {
       </Cell>
       <Cell>
         <Typography $variant="body1" $align="right">
-          {formatBigNumber(item.volume || 0, 2, 0)}
+          {formatNumber(pph, 2, 0)}
         </Typography>
       </Cell>
       <Cell>
@@ -78,11 +79,22 @@ export const HeatCostBenefitCalculator: FC<HeatCostBenefirCalculatorProps> = ({
       .sort((a, b) => a.pph - b.pph)
       .map(it => <HeatItem {...it} heatItem={ItemsHeat[parseInt(it.item.id)]} />);
   }, [marketSnapshotQ.data]);
+  const lastUpdate = useMemo(
+    () =>
+      (marketSnapshotQ.data?.marketPrices.length || 0) > 0
+        ? `Last update at: ${formatDate(
+            new Date(marketSnapshotQ.data?.marketPrices[0]!.routineAtTime!),
+            'HH:mm:ss - MM/dd/yyyy'
+          )}`
+        : undefined,
+    [marketSnapshotQ.data]
+  );
   return (
     <IndexLayout title="Heat Cost Benefit Calculator">
       <AdminTitle
         title="Heat Cost Benefit Calculator"
-        subtitle="So you want to BBQ for the lowest, you came to the right place"
+        subtitle="So you want to BBQ for the lowest, you came to the right place."
+        subtitle2={lastUpdate}
         img={<Image src="/images/heat_icon.png" width={96} height={96} />}
         backLink="/calculators"
       />
@@ -95,7 +107,7 @@ export const HeatCostBenefitCalculator: FC<HeatCostBenefirCalculatorProps> = ({
               </Cell>
               <Cell>
                 <Typography $variant="subtitle1" $align="right">
-                  Cost Per Heat
+                  Heat
                 </Typography>
               </Cell>
               <Cell>
@@ -105,7 +117,7 @@ export const HeatCostBenefitCalculator: FC<HeatCostBenefirCalculatorProps> = ({
               </Cell>
               <Cell>
                 <Typography $variant="subtitle1" $align="right">
-                  Volume
+                  Cost Per Heat
                 </Typography>
               </Cell>
               <Cell>

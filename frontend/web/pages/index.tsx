@@ -5,7 +5,10 @@ import { AdminTitle } from '@app/components/admin-title';
 const Home: React.FC = () => {
   return (
     <IndexLayout title="Home">
-      <AdminTitle title="Idlescape Utils" subtitle="The best tool to calculate realtime results!" />
+      <AdminTitle
+        title="Idlescape Utils"
+        subtitle="Up to date market prices, market history and calculators"
+      />
     </IndexLayout>
   );
 };

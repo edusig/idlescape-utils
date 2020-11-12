@@ -23,12 +23,17 @@ const CalculatorsList = styled.div`
 `;
 
 const CalculatorsItem = styled.div`
-  border: 2px solid #ddd;
+  border: thin solid #ddd;
   border-radius: 2rem;
   padding: 1rem 1.5rem;
   cursor: pointer;
   margin: 0.5rem;
   max-width: 164px;
+  transition: box-shadow 200ms ease-in-out;
+  &:hover {
+    box-shadow: rgb(0 0 0 / 20%) 0px 3px 3px -2px, rgb(0 0 0 / 14%) 0px 3px 4px 0px,
+      rgb(0 0 0 / 12%) 0px 1px 8px 0px;
+  }
 `;
 
 const Calculator: FC<CalculatorProps> = ({ title, image, url }) => {

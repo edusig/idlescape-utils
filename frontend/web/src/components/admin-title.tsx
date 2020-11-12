@@ -55,6 +55,8 @@ export type ImageProps = Omit<
 export interface AdminTitleProps {
   title: string;
   subtitle?: string;
+  subtitle2?: string;
+  obs?: string;
   backLink?: string;
   backLabel?: string;
   img?: React.ReactNode;
@@ -63,6 +65,8 @@ export interface AdminTitleProps {
 export const AdminTitle: React.FC<AdminTitleProps> = ({
   title,
   subtitle,
+  subtitle2,
+  obs,
   img,
   backLabel = 'Back',
   backLink,
@@ -76,6 +80,16 @@ export const AdminTitle: React.FC<AdminTitleProps> = ({
       {subtitle != null && (
         <Typography $variant="body1" $color="textSecondary">
           {subtitle}
+        </Typography>
+      )}
+      {subtitle2 != null && (
+        <Typography $variant="body1" $color="textSecondary">
+          {subtitle2}
+        </Typography>
+      )}
+      {obs != null && (
+        <Typography $variant="caption" $color="textSecondary">
+          {obs}
         </Typography>
       )}
       {backLink != null && (
