@@ -110,7 +110,7 @@ export const IndexDrawer: React.FC<AdminDrawerProps> = ({ open, onClose }) => {
           </Menu>
         </DrawerContent>
         <DrawerFooter>
-          <Typography variant="subtitle2">
+          <Typography $variant="subtitle2">
             Developed by{' '}
             <a href="https://github/edusig" target="_blank">
               Eduardo Ciciliato

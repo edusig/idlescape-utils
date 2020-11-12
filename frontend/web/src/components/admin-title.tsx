@@ -51,11 +51,11 @@ export const AdminTitle: React.FC<AdminTitleProps> = ({ title, subtitle, img }) 
   return (
     <AdminTitleContainer>
       {img != null ? img : undefined}
-      <Typography variant="h3" textComponent="h1">
+      <Typography $variant="h3" textComponent="h1">
         {title}
       </Typography>
       {subtitle != null && (
-        <Typography variant="body1" color="textSecondary">
+        <Typography $variant="body1" $color="textSecondary">
           {subtitle}
         </Typography>
       )}

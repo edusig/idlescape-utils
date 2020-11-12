@@ -37,20 +37,20 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
               loading={idx <= 15 ? 'eager' : 'lazy'}
               priority={idx <= 10}
             />
-            <ItemName variant="body1">{it?.name}</ItemName>
+            <ItemName $variant="body1">{it?.name}</ItemName>
           </CustomCell>
           <Cell>
-            <Typography variant="body1" align="right">
+            <Typography $variant="body1" $align="right">
               {formatNumber(it?.minPrice || 0, 2, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body1" align="right">
+            <Typography $variant="body1" $align="right">
               {formatNumber(it?.volume || 0, 2, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body1" align="right">
+            <Typography $variant="body1" $align="right">
               {formatNumber(it?.offerCount || 0, 2, 0)}
             </Typography>
           </Cell>
@@ -81,25 +81,25 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
           <thead>
             <tr>
               <Cell>
-                <Typography variant="subtitle1">Item</Typography>
+                <Typography $variant="subtitle1">Item</Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle1" align="right">
+                <Typography $variant="subtitle1" $align="right">
                   Min Price
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle1" align="right">
+                <Typography $variant="subtitle1" $align="right">
                   Volume
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle1" align="right">
+                <Typography $variant="subtitle1" $align="right">
                   Offer Count
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle1">Actions</Typography>
+                <Typography $variant="subtitle1">Actions</Typography>
               </Cell>
             </tr>
           </thead>
@@ -111,9 +111,11 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  console.time('MarketPricesSSR');
   const initialMarketSnapshot = await fetch(
     `${process.env.NEXT_PUBLIC_API_HOST}/api/market-prices`
   ).then(res => res.json());
+  console.timeEnd('MarketPricesSSR');
   return { props: { initialMarketSnapshot } };
 };
 

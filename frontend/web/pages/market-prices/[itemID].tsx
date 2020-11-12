@@ -39,52 +39,52 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
       (itemDetailQ.data?.history || []).map((it: ItemDetail, idx: number) => (
         <Row key={idx}>
           <DateCell>
-            <Typography variant="body2">
+            <Typography $variant="body2">
               {formatDate(new Date(it?.routineAtTime!), 'HH:mm - MM/dd')}
             </Typography>
           </DateCell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.minPrice || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.relativeMinPriceFirst5 || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.relativeMinPriceFirst10 || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.meanPrice || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.medianPrice || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.stdDeviation || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.maxPrice || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.volume || 0, 0, 0)}
             </Typography>
           </Cell>
           <Cell>
-            <Typography variant="body2" align="right">
+            <Typography $variant="body2" $align="right">
               {formatNumber(it?.offerCount || 0, 0, 0)}
             </Typography>
           </Cell>
@@ -122,7 +122,7 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
           <PriceHistoryChart items={itemDetailQ.data.history.slice(0).reverse()} />
         </Chart>
       )}
-      <Typography variant="caption" align="center">
+      <Typography $variant="caption" $align="center">
         MMP = Mean Min Price of the first X offers
       </Typography>
       <ResponsiveTable>
@@ -130,50 +130,50 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
           <thead>
             <tr>
               <Cell>
-                <Typography variant="subtitle2">Date Time</Typography>
+                <Typography $variant="subtitle2">Date Time</Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Min P.
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   MMP 5
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   MMP 10
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Mean P.
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Median P.
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Std. Dev.
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Max P.
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Volume
                 </Typography>
               </Cell>
               <Cell>
-                <Typography variant="subtitle2" align="right">
+                <Typography $variant="subtitle2" $align="right">
                   Offers
                 </Typography>
               </Cell>

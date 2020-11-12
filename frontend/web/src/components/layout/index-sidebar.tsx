@@ -50,7 +50,7 @@ export const IndexSidebar: React.FC = () => {
             <MenuItemIcon>
               <FaHome size={20} />
             </MenuItemIcon>
-            <Typography variant="subtitle1">Home</Typography>
+            <Typography $variant="subtitle1">Home</Typography>
           </MenuItem>
         </Link>
         <Link href="/market-prices">
@@ -58,7 +58,7 @@ export const IndexSidebar: React.FC = () => {
             <MenuItemIcon>
               <FaStore size={20} />
             </MenuItemIcon>
-            <Typography variant="subtitle1">Market Prices</Typography>
+            <Typography $variant="subtitle1">Market Prices</Typography>
           </MenuItem>
         </Link>
         <Link href="/calculators">
@@ -67,7 +67,7 @@ export const IndexSidebar: React.FC = () => {
               <FaCalculator size={20} />
             </MenuItemIcon>
 
-            <Typography variant="subtitle1">Calculators</Typography>
+            <Typography $variant="subtitle1">Calculators</Typography>
           </MenuItem>
         </Link>
       </Menu>

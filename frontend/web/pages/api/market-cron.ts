@@ -143,11 +143,7 @@ const cron = async () => {
     let processedQueue: any[] = [];
     let routineTime: Date;
     let routineCount = 0;
-    const socket = io('wss://idlescape.com', {
-      query: { token: `Bearer ${jwt}` },
-      reconnection: true,
-      forceNew: true,
-    });
+    const socket = io('wss://idlescape.com', { query: { token: `Bearer ${jwt}` } });
 
     // Socket message handlers
     socket.on('pong', (data: any) => socket.emit('latency', data));
