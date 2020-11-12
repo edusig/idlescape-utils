@@ -111,11 +111,9 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  console.time('MarketPricesSSR');
   const initialMarketSnapshot = await fetch(
     `${process.env.NEXT_PUBLIC_API_HOST}/api/market-prices`
   ).then(res => res.json());
-  console.timeEnd('MarketPricesSSR');
   return { props: { initialMarketSnapshot } };
 };
 

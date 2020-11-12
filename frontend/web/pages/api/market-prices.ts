@@ -1,15 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetch from 'isomorphic-unfetch';
 
+export interface MarketPricesItemDetail {
+  id: string;
+  name: string;
+  minPrice: number;
+  volume: number;
+  offerCount: number;
+  routineAtTime: number;
+}
+
 export interface MarketPricesGetResponse {
-  marketPrices: {
-    id: string;
-    name: string;
-    minPrice: number;
-    volume: number;
-    offerCount: number;
-    routineAtTime: number;
-  }[];
+  marketPrices: MarketPricesItemDetail[];
 }
 
 const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) => {

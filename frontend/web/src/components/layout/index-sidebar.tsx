@@ -62,7 +62,7 @@ export const IndexSidebar: React.FC = () => {
           </MenuItem>
         </Link>
         <Link href="/calculators">
-          <MenuItem active={asPath === '/calculators'}>
+          <MenuItem active={asPath.startsWith('/calculators')}>
             <MenuItemIcon>
               <FaCalculator size={20} />
             </MenuItemIcon>

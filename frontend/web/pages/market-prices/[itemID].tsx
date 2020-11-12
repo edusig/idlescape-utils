@@ -2,7 +2,7 @@ import { AdminTitle } from '@app/components/admin-title';
 import IndexLayout from '@app/components/layout';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import useSWR from 'swr';
 import { ItemDetail, ItemDetailGetResponse } from '../api/market-prices/[itemID]';
 import formatDate from 'date-fns/format';
@@ -30,7 +30,10 @@ const Chart = styled.div`
 
 // TODO: Pills with insights (lowest min price / highest min price / avg min price)
 // TODO:
-export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPricesDetailProps) => {
+export const MarketPricesDetail: FC<MarketPricesDetailProps> = ({
+  initialItemDetail,
+  itemName,
+}) => {
   const { query } = useRouter();
   const itemID = query.itemID as string;
   const itemDetailQ = useSWR(`/api/market-prices/${itemID}`, { initialData: initialItemDetail });
@@ -107,6 +110,7 @@ export const MarketPricesDetail = ({ initialItemDetail, itemName }: MarketPrices
       <AdminTitle
         title={`Details of ${itemName}`}
         subtitle={lastUpdate}
+        backLink="/market-prices"
         img={
           <Image
             src={imageDict[parseInt(itemID, 10)]}
