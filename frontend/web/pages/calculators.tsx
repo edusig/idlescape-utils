@@ -62,6 +62,11 @@ export const HeatCostBenefitCalculator: FC<HeatCostBenefirCalculatorProps> = () 
           image="/images/heat_icon.png"
           title="Heat Cost Benefit"
         />
+        <Calculator
+          url="/calculators/mining"
+          image="/images/mining/iron_pickaxe.png"
+          title="Mining"
+        />
       </CalculatorsList>
     </IndexLayout>
   );

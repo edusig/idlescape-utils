@@ -12,8 +12,16 @@ import formatDate from 'date-fns/format';
 import { useMemo } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import Link from 'next/link';
-import { Cell, CustomCell, ResponsiveTable, Row, Table } from '@app/styled-components/table';
+import {
+  ActionCell,
+  Cell,
+  CustomCell,
+  ResponsiveTable,
+  Row,
+  Table,
+} from '@app/styled-components/table';
 import styled from 'styled-components';
+import { IconButton } from '@app/components/icon-button';
 
 export const ItemName = styled(Typography)`
   margin-left: 1rem;
@@ -54,11 +62,13 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
               {formatNumber(it?.offerCount || 0, 2, 0)}
             </Typography>
           </Cell>
-          <Cell>
+          <ActionCell>
             <Link href={`/market-prices/${it?.id}`}>
-              <FaChartLine size={24} />
+              <IconButton>
+                <FaChartLine size={20} />
+              </IconButton>
             </Link>
-          </Cell>
+          </ActionCell>
         </Row>
       )),
     [marketSnapshotQ.data]

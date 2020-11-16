@@ -26,3 +26,8 @@ export const CustomCell = styled(Cell)`
   display: flex;
   align-items: center;
 `;
+
+export const ActionCell = styled.td`
+  padding: 0.15rem 0.5rem;
+  border-bottom: thin solid #007fd736;
+`;
