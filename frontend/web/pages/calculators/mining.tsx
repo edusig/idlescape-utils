@@ -13,11 +13,11 @@ import { MiningLocation } from '@app/lib/game/location-mining';
 import { MiningGetResponse, MiningCalculatorLocation } from '../api/mining';
 import { urlBuilder } from '@0soft/zero-lib';
 import Cookies from 'cookies';
-import cookieCutter from 'cookie-cutter';
+// import cookieCutter from 'cookie-cutter';
 import { Form } from '@app/components/hook-form/form';
 import { TextField } from '@app/components/hook-form/text-field';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Button } from '@app/components/button';
+// import { Button } from '@app/components/button';
 import { SelectField } from '@app/components/hook-form/select-field';
 
 interface MiningCalculatorProps {
