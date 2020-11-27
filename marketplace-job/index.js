@@ -34,52 +34,57 @@ socket.on('get market manifest', data => {
   routineTime = new Date();
   routineCount = data.length;
   console.log('Updating market,', routineCount, 'items found.');
-  updateItems(data);
+  itemQueue = getItemIds(data);
   itemRoutine();
 });
 
 socket.on('get player marketplace items', data => {
   const body = processItemData(data);
-  if(body != null) {
+  if (body != null) {
     processedQueue.push(body);
   }
 });
 
 // Utilitary functions
-const updateItems = newItems => {
-  itemQueue = newItems.slice(0).map(it => it.itemID);
-  return itemQueue;
-};
+const getItemIds = newItems => newItems.slice(0).map(it => it.itemID);
 
-const chooseRandomItem = items => {
+const chooseRandomItem = (len, count) => {
   console.log(
     'Picking item',
-    routineCount - (items.length - 1),
+    count - (len - 1),
     'of',
-    routineCount,
-    `(${(((routineCount - (items.length - 1)) / routineCount) * 100).toFixed(2)}%) -`
+    count,
+    `(${(((count - (len - 1)) / count) * 100).toFixed(2)}%)`
   );
-  const idx = Math.floor(Math.random() * (items.length - 1));
-  const item = items.splice(idx, 1);
-  return item;
+  const idx = Math.floor(Math.random() * (len - 1));
+  return idx;
 };
 
-const getRelativeMin = (data) => Math.floor(data.reduce((acc, it) => acc + it.price * it.stackSize, 0) /
-    data.reduce((acc, it) => acc + it.stackSize, 0));
+const getRelativeMin = data =>
+  Math.floor(
+    data.reduce((acc, it) => acc + it.price * it.stackSize, 0) /
+      data.reduce((acc, it) => acc + it.stackSize, 0)
+  );
 const getPercent = (data, percent) => {
   const pct = Math.ceil(data.length * percent);
   return pct >= 1 ? pct : 1;
-}
+};
 
 const processItemData = data => {
-  if(data.length <= 0) {
+  if (data.length <= 0) {
     return null;
   }
+  console.log('Processing:', data[0].name, `(${data[0].itemID})`);
   const middle = Math.floor((data.length - 1) / 2);
   const medianData = data[!isNaN(middle) && middle >= 0 ? middle : 0];
-  const median = medianData != null && medianData.hasOwnProperty('price') ? medianData.price : data[0].price
+  const median =
+    medianData != null && medianData.hasOwnProperty('price') ? medianData.price : data[0].price;
   // Removes outliers (Price > 1 Billion or 100x greater than the median)
-  const filtered = data.filter(it => it.price <= 1000000000 && it.price <= median * 100, )
+  const filtered = data.filter(it => it.price <= 1000000000 && it.price <= median * 100);
+  if (filtered.length <= 0) {
+    console.log('Everything was filtered out', JSON.stringify(data));
+    return null;
+  }
   const sum = filtered.reduce((acc, it) => acc + it.price, 0);
   const mean = sum / filtered.length;
   return {
@@ -94,16 +99,18 @@ const processItemData = data => {
       meanPrice: mean,
       volume: filtered.reduce((acc, it) => acc + it.stackSize, 0),
       offerCount: data.length,
-      relativeMinPriceFirst5: getRelativeMin(filtered.slice(0,5)),
+      relativeMinPriceFirst5: getRelativeMin(filtered.slice(0, 5)),
       relativeMinPriceFirst10: getRelativeMin(filtered.slice(0, 10)),
       relativeMinPriceFirst5Pct: getRelativeMin(filtered.slice(0, getPercent(0.05))),
       relativeMinPriceFirst10Pct: getRelativeMin(filtered.slice(0, getPercent(0.1))),
       relativeMinPriceFirst15Pct: getRelativeMin(filtered.slice(0, getPercent(0.15))),
-      stdDeviation: Math.sqrt(filtered.reduce((acc, it) => acc + Math.pow(it.price - mean, 2), 0) / filtered.length),
+      stdDeviation: Math.sqrt(
+        filtered.reduce((acc, it) => acc + Math.pow(it.price - mean, 2), 0) / filtered.length
+      ),
       routineAt: routineTime.toISOString(),
       updatedAt: new Date().toISOString(),
       updatedAtTime: new Date().getTime(),
-    })
+    }),
   };
 };
 
@@ -120,23 +127,17 @@ const updatesSheetItems = async queue => {
   }
 };
 
-const itemCheck = id => socket.emit('get player marketplace items', id);
-
 // Main routines
 const marketRoutine = () => {
-  const now = new Date();
-  if([0, 30].includes(now.getMinutes())) {
-    console.log('ITS TIME TO UPDATE', now.toISOString());
-    itemQueue = [];
-    processedQueue = [];
-    socket.emit('get market manifest');
-  }
-  setTimeout(marketRoutine, MARKET_ROUTINE_TIMEOUT);
+  itemQueue = [];
+  processedQueue = [];
+  socket.emit('get market manifest');
 };
 
 const itemRoutine = () => {
-  let it = chooseRandomItem(itemQueue);
-  itemCheck(it);
+  let idx = chooseRandomItem(itemQueue.length, routineCount);
+  let it = itemQueue.splice(idx, 1)[0];
+  socket.emit('get player marketplace items', it);
   if (itemQueue.length > 0) {
     setTimeout(
       itemRoutine,
@@ -150,4 +151,4 @@ const itemRoutine = () => {
 };
 
 console.log('STARTING CLIENT');
-setTimeout(() => marketRoutine(), 5000);
+setTimeout(() => marketRoutine(), 2000);
