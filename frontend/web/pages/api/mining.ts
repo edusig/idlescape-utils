@@ -78,7 +78,7 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
     };
     console.log('MINING OPTIONS', options);
 
-    let api = await fetch('***REMOVED***', {
+    let api = await fetch(process.env.SB_API_URL || '', {
       headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
     });
     const apiData = await api.json();

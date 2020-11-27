@@ -31,12 +31,9 @@ export interface ItemDetailGetResponse {
 const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     console.log('Called market snapshot');
-    let api = await fetch(
-      `***REMOVED***/tabs/market-history/id/${req.query.itemID}`,
-      {
-        headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
-      }
-    );
+    let api = await fetch(`${process.env.SB_API_URL}/tabs/market-history/id/${req.query.itemID}`, {
+      headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
+    });
     const apiData = await api.json();
     if (!Array.isArray(apiData)) {
       return res.json({ current: null, history: [] });
