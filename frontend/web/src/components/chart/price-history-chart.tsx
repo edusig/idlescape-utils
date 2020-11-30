@@ -10,10 +10,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { ItemDetail } from '../../../pages/api/market-prices/[itemID]';
 import formatDate from 'date-fns/format';
 import { formatBigNumber, formatNumber } from '@app/util/formatters/number';
 import { useState } from 'react';
+import { ItemDetail } from 'web/src/server/interfaces';
 
 export interface PriceHistoryChartProps {
   items: ItemDetail[];

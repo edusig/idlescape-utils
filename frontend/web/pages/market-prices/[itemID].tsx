@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 import useSWR from 'swr';
-import { ItemDetail, ItemDetailGetResponse } from '../api/market-prices/[itemID]';
+import { ItemDetailGetResponse } from '../api/market-prices/[itemID]';
 import formatDate from 'date-fns/format';
 import { Cell, ResponsiveTable, Row, Table } from '@app/styled-components/table';
 import Typography from '@app/components/typography';
@@ -13,6 +13,7 @@ import { formatNumber } from '@app/util/formatters/number';
 import { imageDict } from '@app/lib/game/image-dict';
 import styled from 'styled-components';
 import { PriceHistoryChart } from '@app/components/chart/price-history-chart';
+import { ItemDetail } from 'web/src/server/interfaces';
 
 interface MarketPricesDetailProps {
   initialItemDetail: ItemDetailGetResponse;
