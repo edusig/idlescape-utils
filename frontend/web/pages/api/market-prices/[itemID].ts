@@ -10,13 +10,10 @@ export interface ItemDetailGetResponse {
 
 const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    console.log('Called market snapshot');
     const db = await connectToDatabase();
     const mh = db.collection('market-history');
     const item = await mh.findOne({ itemID: parseInt(req.query.itemID as string, 10) });
-    console.log('ITEM', item);
     if (item != null) {
-      console.log('FOUND IN MONGO');
       return res.json({ current: item.history[0], history: item.history });
     }
 

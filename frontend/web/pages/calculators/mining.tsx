@@ -139,7 +139,19 @@ const defaultOptions = {
 };
 
 export const MiningCalculator: FC<MiningCalculatorProps> = ({ initialData, initialOps }) => {
-  const [options, setOptions] = useState<MiningCalculatorOptions>(initialOps);
+  const [firstOptions, setFirstOptions] = useState(true);
+  const [options, setOptions] = useState<MiningCalculatorOptions>(() => {
+    if (initialOps == null) {
+      let cookieOps = cookieCutter.get('miningOps');
+      if (cookieOps != null) {
+        try {
+          return JSON.parse(cookieOps);
+        } catch (e) {}
+      }
+      return defaultOptions;
+    }
+    return initialOps;
+  });
   const methods = useForm({ defaultValues: options });
   const miningQ = useSWR<MiningGetResponse>(urlBuilder('/api/mining', { params: options }), {
     initialData: initialData,
@@ -158,13 +170,15 @@ export const MiningCalculator: FC<MiningCalculatorProps> = ({ initialData, initi
     miningQ.data,
   ]);
   const handleUpdateOptions = (values: any) => {
-    console.log('UPDATE OPTIONS', values);
     setOptions(prev => ({ ...prev, ...values }));
   };
   useEffect(() => {
-    miningQ.revalidate();
-    console.log('SETTING COOKIE', options);
-    cookieCutter.set('miningOps', JSON.stringify(options));
+    if (firstOptions) {
+      setFirstOptions(() => false);
+    } else {
+      cookieCutter.set('miningOps', JSON.stringify(options));
+      miningQ.revalidate();
+    }
   }, [options]);
   return (
     <IndexLayout title="Mining Calculator">
@@ -328,7 +342,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let options: MiningCalculatorOptions | undefined;
   let cookieOps = cookies.get('miningOps');
   if (cookieOps != null) {
-    console.log('COOKIE OPS', unescape(cookieOps));
     try {
       options = JSON.parse(unescape(cookieOps));
     } catch (e) {
@@ -336,9 +349,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   }
   const initialData = await fetch(
-    urlBuilder(`${process.env.NEXT_PUBLIC_API_HOST}/api/mining`, { params: options })
+    urlBuilder(`${process.env.NEXT_PUBLIC_API_HOST}/api/mining`, {
+      params: options ?? defaultOptions,
+    })
   ).then(res => res.json());
-  return { props: { initialData, initialOps: options ?? undefined } };
+  return { props: { initialData, initialOps: options ?? null } };
 };
 
 export default MiningCalculator;
