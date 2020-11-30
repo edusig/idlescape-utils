@@ -29,7 +29,9 @@ export const updateMarketPricesCache = async (req: NextApiRequest, res: NextApiR
           updateOne: { filter: { itemID: it.itemID }, update: { $push: { history: it } } },
         })
       );
-    await ms.bulkWrite(hops);
+    if (hops.length > 0) {
+      await ms.bulkWrite(hops);
+    }
 
     res.end();
   } else {

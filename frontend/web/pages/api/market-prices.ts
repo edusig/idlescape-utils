@@ -17,7 +17,7 @@ export interface MarketPricesGetResponse {
 const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     const db = await connectToDatabase();
-    const items = await db.collection('market-snapshot').find().toArray();
+    const items = await db.collection('market-snapshot').find().sort({ itemID: -1 }).toArray();
     res.json({ marketPrices: items });
   } else {
     res.status(405);
