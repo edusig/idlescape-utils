@@ -13,6 +13,7 @@ import { Cell, ResponsiveTable, Table, Row, CustomCell } from '@app/styled-compo
 import Link from 'next/link';
 import { FaChartLine } from 'react-icons/fa';
 import formatDate from 'date-fns/format';
+import { IconButton } from '@app/components/icon-button';
 
 interface HeatCostBenefirCalculatorProps {
   initialMarketSnapshot: any;
@@ -55,8 +56,10 @@ const HeatItem: FC<HeatItemProps> = ({ item, heatItem, pph }) => {
         </Typography>
       </Cell>
       <Cell>
-        <Link href={`/market-prices/${item.id}`}>
-          <FaChartLine size={24} />
+        <Link href={`/market-prices/${item?.itemID}`}>
+          <IconButton>
+            <FaChartLine size={20} />
+          </IconButton>
         </Link>
       </Cell>
     </Row>
@@ -71,13 +74,13 @@ export const HeatCostBenefitCalculator: FC<HeatCostBenefirCalculatorProps> = ({
   });
   const items = useMemo(() => {
     return marketSnapshotQ.data?.marketPrices
-      .filter(it => ItemsHeat.hasOwnProperty(it.id))
+      .filter(it => ItemsHeat.hasOwnProperty(it.itemID))
       .map(it => ({
         item: it,
-        pph: it.minPrice / (ItemsHeat[parseInt(it.id)]!.heat || 1),
+        pph: it.minPrice / (ItemsHeat[parseInt(it.itemID)]!.heat || 1),
       }))
       .sort((a, b) => a.pph - b.pph)
-      .map(it => <HeatItem {...it} heatItem={ItemsHeat[parseInt(it.item.id)]} />);
+      .map(it => <HeatItem {...it} heatItem={ItemsHeat[parseInt(it.item.itemID)]} />);
   }, [marketSnapshotQ.data]);
   const lastUpdate = useMemo(
     () =>

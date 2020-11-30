@@ -6,6 +6,31 @@ export interface MiningItem {
   barId?: number;
 }
 
+export const miningIds = [
+  101,
+  102,
+  103,
+  104,
+  105,
+  106,
+  107,
+  108,
+  109,
+  110,
+  111,
+  112,
+  113,
+  114,
+  201,
+  202,
+  203,
+  204,
+  205,
+  206,
+  207,
+  2013,
+];
+
 export const miningItems: { [key: number]: MiningItem } = {
   101: {
     id: 101,

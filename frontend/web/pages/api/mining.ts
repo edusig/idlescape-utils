@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fetch from 'isomorphic-unfetch';
-import { miningItems } from '@app/lib/game/item-mining';
+import { miningIds, miningItems } from '@app/lib/game/item-mining';
 import { miningLocations, MiningLocation } from '@app/lib/game/location-mining';
+import { connectToDatabase } from 'web/src/server/mongodb';
 
 export interface MarketPricesItemDetail {
   id: string;
@@ -76,41 +76,15 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
         superHeated: (req.query.food_ingredients_superHeated as string[]) || [],
       },
     };
-    console.log('MINING OPTIONS', options);
+    // console.log('MINING OPTIONS', options);
 
-    let api = await fetch(process.env.SB_API_URL || '', {
-      headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
-    });
-    const apiData = await api.json();
-    if (!Array.isArray(apiData)) {
-      return res.json({ marketPrices: [] });
-    }
-    const miningList = Object.keys(miningItems);
-    const marketPrices = apiData
-      .filter(it => miningList.includes(it.id))
-      .map((it: any) => {
-        let data: any = {};
-        try {
-          data = JSON.parse(it.data);
-        } catch (e) {
-          console.error(e);
-        }
-        return {
-          id: it.id,
-          name: data.name,
-          minPrice: data.minPrice,
-          relativeMinPriceFirst5: data.relativeMinPriceFirst5,
-          routineAtTime: parseInt(it.routineAtTime, 10),
-        };
-      });
-    const latestUpdate = marketPrices[0].routineAtTime;
+    const db = await connectToDatabase();
+    const ms = db.collection('market-snapshot');
+    const mp = await ms.find({ itemID: { $in: miningIds } }).toArray();
 
-    const items = marketPrices.reduce((acc: any, it) => {
-      if (miningItems.hasOwnProperty(it.id)) {
-        acc[it.id] = it;
-      }
-      return acc;
-    }, {});
+    const latestUpdate = mp[0].routineAtTime;
+
+    const items = mp.reduce((acc: any, it) => ({ ...acc, [it.itemID]: it }), {});
 
     const locations = miningLocations.map(location => {
       const time =
@@ -118,7 +92,7 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
       const actsHour = 3600 / time;
       const actsDay = (3600 * 24) / time;
       const detail: MiningCalculatorLocationDetail[] = location.loot.map(it => {
-        const chance = location.lootChance[it];
+        const chance = location.lootChance[it] * (1 + options.buffs.gathering);
         const lootHour = actsHour * chance;
         const lootDay = actsDay * chance;
         const hasBar = miningItems[it].barId != null && options.buffs.superHeated > 0.0;
@@ -128,8 +102,11 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
         const barDayFood = barDay != null ? barDay * (1 + options.food.superHeated) : undefined;
         const minPrice = miningItems[it].barId != null ? items[miningItems[it].barId!].minPrice : 0;
         const profitHour =
-          lootHour * items[it].minPrice + (barHour != null ? barHour * minPrice : 0);
-        const profitDay = lootDay * items[it].minPrice + (barDay != null ? barDay * minPrice : 0);
+          (options.buffs.scholar > 0 ? 0 : 1) * lootHour * items[it].minPrice +
+          (barHour != null ? barHour * minPrice : 0);
+        const profitDay =
+          (options.buffs.scholar > 0 ? 0 : 1) * lootDay * items[it].minPrice +
+          (barDay != null ? barDay * minPrice : 0);
         let profitHourFood;
         let profitDayFood;
         if (
@@ -137,11 +114,11 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
           (options.food.superHeated > 0 && options.foodIngredients.superHeated.length > 0)
         ) {
           const gatheringPrice = options.foodIngredients.gathering.reduce(
-            (acc, it) => acc + (marketPrices.find(item => item.id === it)?.minPrice || 0),
+            (acc, it) => acc + (mp.find(item => item.id === it)?.minPrice || 0),
             0
           );
           const superHeatedPrice = options.foodIngredients.superHeated.reduce(
-            (acc, it) => acc + (marketPrices.find(item => item.id === it)?.minPrice || 0),
+            (acc, it) => acc + (mp.find(item => item.id === it)?.minPrice || 0),
             0
           );
           const gatheringPerStack = gatheringPrice / options.food.gatherginStacks;
@@ -198,7 +175,7 @@ const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) =>
       };
     });
 
-    res.json({ marketPrices, latestUpdate, locations });
+    res.json({ marketPrices: mp, latestUpdate, locations });
   } else {
     res.status(405);
   }

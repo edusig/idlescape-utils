@@ -39,7 +39,7 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
         <Row key={idx}>
           <CustomCell>
             <Image
-              src={imageDict[parseInt(it?.id || '3')]}
+              src={imageDict[it?.itemID]}
               width={32}
               height={32}
               loading={idx <= 15 ? 'eager' : 'lazy'}
@@ -63,7 +63,7 @@ const MarketPricesPage = ({ initialMarketSnapshot }: MarketPricesPageProps) => {
             </Typography>
           </Cell>
           <ActionCell>
-            <Link href={`/market-prices/${it?.id}`}>
+            <Link href={`/market-prices/${it?.itemID}`}>
               <IconButton>
                 <FaChartLine size={20} />
               </IconButton>

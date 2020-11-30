@@ -13,12 +13,31 @@ import { MiningLocation } from '@app/lib/game/location-mining';
 import { MiningGetResponse, MiningCalculatorLocation } from '../api/mining';
 import { urlBuilder } from '@0soft/zero-lib';
 import Cookies from 'cookies';
-// import cookieCutter from 'cookie-cutter';
+import cookieCutter from 'cookie-cutter';
 import { Form } from '@app/components/hook-form/form';
 import { TextField } from '@app/components/hook-form/text-field';
 import { FormProvider, useForm } from 'react-hook-form';
-// import { Button } from '@app/components/button';
 import { SelectField } from '@app/components/hook-form/select-field';
+import { Button } from '@app/components/button';
+
+const OptionSection = styled.div`
+  margin: 1rem 0;
+  & > div {
+    margin: 0 1rem;
+    display: inline-block;
+    & > label {
+      width: 110px;
+      display: inline-block;
+    }
+    & > select {
+      min-width: 80px;
+      margin-left: 0.5rem;
+    }
+    &:nth-child(2) {
+      margin-left: 0;
+    }
+  }
+`;
 
 interface MiningCalculatorProps {
   initialData: any;
@@ -119,10 +138,7 @@ const defaultOptions = {
   foodIngredients_superHeated: [],
 };
 
-export const MiningCalculator: FC<MiningCalculatorProps> = ({
-  initialData,
-  initialOps = defaultOptions,
-}) => {
+export const MiningCalculator: FC<MiningCalculatorProps> = ({ initialData, initialOps }) => {
   const [options, setOptions] = useState<MiningCalculatorOptions>(initialOps);
   const methods = useForm({ defaultValues: options });
   const miningQ = useSWR<MiningGetResponse>(urlBuilder('/api/mining', { params: options }), {
@@ -147,6 +163,8 @@ export const MiningCalculator: FC<MiningCalculatorProps> = ({
   };
   useEffect(() => {
     miningQ.revalidate();
+    console.log('SETTING COOKIE', options);
+    cookieCutter.set('miningOps', JSON.stringify(options));
   }, [options]);
   return (
     <IndexLayout title="Mining Calculator">
@@ -159,21 +177,109 @@ export const MiningCalculator: FC<MiningCalculatorProps> = ({
       />
       <FormProvider {...methods}>
         <Form onSubmit={handleUpdateOptions}>
-          <TextField name="skill" />
-          <SelectField
-            name="buffs_superHeated"
-            label="Super Heated"
-            options={[
-              { label: '0%', value: 0 },
-              { label: '1%', value: 0.01 },
-              { label: '2%', value: 0.02 },
-              { label: '3%', value: 0.03 },
-              { label: '4%', value: 0.04 },
-              { label: '5%', value: 0.05 },
-              { label: '6%', value: 0.06 },
-            ]}
-          />
-          <button type="submit">Send</button>
+          Skill Effective Level: <TextField name="skill" />
+          <OptionSection>
+            <Typography $variant="h6">Gear Buffs</Typography>
+            <div>
+              <SelectField
+                name="buffs_superHeated"
+                label="Superheat"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '1%', value: 0.01 },
+                  { label: '2%', value: 0.02 },
+                  { label: '3%', value: 0.03 },
+                  { label: '4%', value: 0.04 },
+                  { label: '5%', value: 0.05 },
+                  { label: '6%', value: 0.06 },
+                ]}
+              />
+            </div>
+            <div>
+              <SelectField
+                name="buffs_haste"
+                label="Haste"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '4%', value: 0.04 },
+                  { label: '8%', value: 0.08 },
+                  { label: '12%', value: 0.12 },
+                  { label: '16%', value: 0.16 },
+                  { label: '20%', value: 0.2 },
+                  { label: '24%', value: 0.24 },
+                ]}
+              />
+            </div>
+            <div>
+              <SelectField
+                name="buffs_gathering"
+                label="Gathering"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '10%', value: 0.1 },
+                  { label: '20%', value: 0.2 },
+                  { label: '30%', value: 0.3 },
+                  { label: '40%', value: 0.4 },
+                  { label: '50%', value: 0.5 },
+                  { label: '60%', value: 0.6 },
+                ]}
+              />
+            </div>
+            <div>
+              <SelectField
+                name="buffs_scholar"
+                label="Scholar"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '20%', value: 0.2 },
+                  { label: '40%', value: 0.4 },
+                  { label: '60%', value: 0.6 },
+                  { label: '80%', value: 0.8 },
+                  { label: '100%', value: 1 },
+                  { label: '120%', value: 1.2 },
+                ]}
+              />
+            </div>
+          </OptionSection>
+          {/* <OptionSection>
+            <Typography $variant="h6">Food Buffs</Typography>
+            <div>
+              <SelectField
+                name="food_prolonging"
+                label="Prolonging"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '10%', value: 0.1 },
+                  { label: '20%', value: 0.2 },
+                  { label: '30%', value: 0.3 },
+                  { label: '40%', value: 0.4 },
+                  { label: '50%', value: 0.5 },
+                  { label: '60%', value: 0.6 },
+                ]}
+              />
+            </div>
+            <div>
+              <SelectField
+                name="food_gathering"
+                label="Gathering"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '20%', value: 0.2 },
+                ]}
+              />
+            </div>
+            <div>
+              <SelectField
+                name="food_superHeated"
+                label="Superheat"
+                options={[
+                  { label: '0%', value: 0 },
+                  { label: '2%', value: 0.02 },
+                ]}
+              />
+            </div>
+          </OptionSection> */}
+          <Button type="submit">Calculate</Button>
         </Form>
       </FormProvider>
       <ResponsiveTable>
@@ -222,20 +328,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let options: MiningCalculatorOptions | undefined;
   let cookieOps = cookies.get('miningOps');
   if (cookieOps != null) {
+    console.log('COOKIE OPS', unescape(cookieOps));
     try {
-      options = JSON.parse(cookieOps);
+      options = JSON.parse(unescape(cookieOps));
     } catch (e) {
       console.error(e);
     }
   }
-  if (options == null) {
-    options = defaultOptions;
-  }
-  console.log('OPTIONS', options);
   const initialData = await fetch(
     urlBuilder(`${process.env.NEXT_PUBLIC_API_HOST}/api/mining`, { params: options })
   ).then(res => res.json());
-  return { props: { initialData } };
+  return { props: { initialData, initialOps: options ?? undefined } };
 };
 
 export default MiningCalculator;

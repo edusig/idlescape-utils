@@ -1,6 +1,20 @@
 import * as React from 'react';
 import { SmartFormInput } from './form';
 import { useFormContext } from 'react-hook-form';
+import styled from 'styled-components';
+import { lighten } from 'polished';
+
+const SelectEl = styled.select`
+  padding: 0.375rem 1rem;
+  border: thin solid ${props => props.theme.palette.primary.main};
+  border-radius: 0.25rem;
+  background-color: white;
+  &:hover {
+    background-color: ${props => lighten(0.65, props.theme.palette.primary.main)};
+  }
+  transition: background 300ms;
+  outline: none;
+`;
 
 export interface SelectOption {
   /** The value that will be used by the form submission */
@@ -30,10 +44,6 @@ export const SelectField: React.FC<SelectFieldProps & SmartFormInput> = ({
   ...selectProps
 }) => {
   const { register } = useFormContext();
-  // const error = React.useMemo(() => (errors?.hasOwnProperty(name) ? errors[name] : undefined), [
-  //   name,
-  //   errors,
-  // ]);
 
   const select = <Select {...selectProps} name={name} inputRef={register} options={options} />;
 
@@ -87,8 +97,8 @@ export const Select: React.FunctionComponent<SelectFieldProps> = ({
 }) => {
   const { register } = useFormContext();
   return (
-    <select {...selectProps} ref={register}>
+    <SelectEl {...selectProps} ref={register}>
       {options.map(mapNative)}
-    </select>
+    </SelectEl>
   );
 };

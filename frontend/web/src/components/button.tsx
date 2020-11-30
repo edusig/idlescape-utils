@@ -23,6 +23,8 @@ const ButtonContainer = styled.button`
     background-color: ${props => lighten(0.65, props.theme.palette.primary.main)};
   }
   transition: background 300ms;
+  cursor: pointer;
+  outline: none;
 `;
 
 const ButtonIcon = styled.span`
@@ -43,11 +45,12 @@ const ButtonEndIcon = styled(ButtonIcon)`
 export interface ButtonProps {
   startIcon?: ReactNode;
   endIcon?: ReactNode;
+  type?: string;
 }
 
-export const Button: FC<ButtonProps> = ({ children, startIcon, endIcon }) => {
+export const Button: FC<ButtonProps> = ({ children, startIcon, endIcon, ...rest }) => {
   return (
-    <ButtonContainer>
+    <ButtonContainer {...(rest as any)}>
       <ButtonContent>
         {startIcon && <ButtonStartIcon>{startIcon}</ButtonStartIcon>}
         {children}

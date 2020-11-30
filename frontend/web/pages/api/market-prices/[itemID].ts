@@ -1,27 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetch from 'isomorphic-unfetch';
-
-export interface ItemDetail {
-  id: string;
-  name: string;
-  minPrice: number;
-  maxPrice: number;
-  medianPrice: number;
-  sumPrice: number;
-  meanPrice: number;
-  volume: number;
-  offerCount: number;
-  relativeMinPriceFirst5: number;
-  relativeMinPriceFirst10: number;
-  relativeMinPriceFirst5Pct: number;
-  relativeMinPriceFirst10Pct: number;
-  relativeMinPriceFirst15Pct: number;
-  stdDeviation: number;
-  routineAt: string;
-  routineAtTime: number;
-  updatedAt: string;
-  updatedAtTime: number;
-}
+import { ItemDetail } from 'web/src/server/interfaces';
+import { connectToDatabase } from 'web/src/server/mongodb';
 
 export interface ItemDetailGetResponse {
   current?: ItemDetail;
@@ -31,6 +11,15 @@ export interface ItemDetailGetResponse {
 const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     console.log('Called market snapshot');
+    const db = await connectToDatabase();
+    const mh = db.collection('market-history');
+    const item = await mh.findOne({ itemID: parseInt(req.query.itemID as string, 10) });
+    console.log('ITEM', item);
+    if (item != null) {
+      console.log('FOUND IN MONGO');
+      return res.json({ current: item.history[0], history: item.history });
+    }
+
     let api = await fetch(`${process.env.SB_API_URL}/tabs/market-history/id/${req.query.itemID}`, {
       headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
     });
@@ -53,6 +42,15 @@ const itemDetailHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       };
     });
     const current = history[0];
+
+    if (item == null) {
+      await mh.insertOne({
+        itemID: parseInt(req.query.itemID as string, 10),
+        history,
+        createdAtTime: new Date().getTime(),
+      });
+    }
+
     res.json({ current, history });
   } else {
     res.status(405);

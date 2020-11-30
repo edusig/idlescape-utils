@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fetch from 'isomorphic-unfetch';
+import { connectToDatabase } from 'web/src/server/mongodb';
 
 export interface MarketPricesItemDetail {
-  id: string;
+  itemID: string;
   name: string;
   minPrice: number;
   volume: number;
@@ -16,31 +16,9 @@ export interface MarketPricesGetResponse {
 
 const marketPricesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    console.log('Called market snapshot');
-    let api = await fetch(process.env.SB_API_URL || '', {
-      headers: { 'X-Api-Key': process.env.SB_API_KEY || '' },
-    });
-    const apiData = await api.json();
-    if (!Array.isArray(apiData)) {
-      return res.json({ marketPrices: [] });
-    }
-    const data = apiData.map((it: any) => {
-      let data: any = {};
-      try {
-        data = JSON.parse(it.data);
-      } catch (e) {
-        console.error(e);
-      }
-      return {
-        id: it.id,
-        name: data.name,
-        minPrice: data.minPrice,
-        volume: data.volume,
-        offerCount: data.offerCount,
-        routineAtTime: parseInt(it.routineAtTime, 10),
-      };
-    });
-    res.json({ marketPrices: data });
+    const db = await connectToDatabase();
+    const items = await db.collection('market-snapshot').find().toArray();
+    res.json({ marketPrices: items });
   } else {
     res.status(405);
   }
